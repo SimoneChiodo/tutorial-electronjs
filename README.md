@@ -119,3 +119,67 @@ Scrivi nella console:
 Ora si possono trovare le build ai percorsi:
 - `📁 dist/win-unpacked/` → versione portabile dell’app
 - `📁 dist/*.exe` → installer NSIS per Windows 10
+
+
+# 🐱 .gitignore consigliato:
+``` gitignore,
+# Node modules
+node_modules/
+**/node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Dependency directories
+/.pnp
+.pnp.js
+
+# Vite build output
+dist/
+out/
+
+# Electron-builder output
+*.exe
+*.app
+*.dmg
+*.deb
+*.snap
+*.AppImage
+*.zip
+*.7z
+*.msi
+release/
+build/
+win-unpacked/
+linux-unpacked/
+mac/
+
+# Electron cache (electron-builder)
+electron-builder-cache/
+**/electron-builder-cache/
+
+# System files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDE / editor
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Optional: npm package lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+```
