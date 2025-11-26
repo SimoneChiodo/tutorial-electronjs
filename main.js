@@ -1,4 +1,9 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow } from 'electron';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -8,17 +13,20 @@ const createWindow = () => {
       nodeIntegration: true,
       contextIsolation: false
     }
-  })
+  });
 
-  if (process.env.NODE_ENV === 'production') {
-    win.loadFile('dist/index.html')
+  const isDev = !app.isPackaged;
+  console.log('isDev:', isDev);
+
+  if (isDev) {
+    win.loadURL('http://localhost:5173');
   } else {
-    win.loadURL('http://localhost:5173')
+    win.loadFile(path.join(__dirname, 'dist', 'index.html'));
   }
-}
+};
 
-app.whenReady().then(createWindow)
+app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit()
-})
+  if (process.platform !== 'darwin') app.quit();
+});

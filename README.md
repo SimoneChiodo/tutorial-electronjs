@@ -24,10 +24,15 @@ Estrai la ZIP in una cartella senza spazi nella cache:
 electron-builder userà automaticamente questi file.
 
 ## 3. Crea il file principale di Electron
-Crea main.js (o main.cjs) nella root del progetto:
+Crea `main.js` (o `main.cjs`) nella root del progetto:
 
 ``` javascript,
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow } from 'electron';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -37,26 +42,28 @@ const createWindow = () => {
       nodeIntegration: true,
       contextIsolation: false
     }
-  })
+  });
 
-  if (process.env.NODE_ENV === 'production') {
-    win.loadFile('dist/index.html')
+  const isDev = !app.isPackaged;
+
+  if (isDev) {
+    win.loadURL('http://localhost:5173');
   } else {
-    win.loadURL('http://localhost:5173')
+    win.loadFile(path.join(__dirname, 'dist', 'index.html'));
   }
-}
+};
 
-app.whenReady().then(createWindow)
+app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit()
-})
+  if (process.platform !== 'darwin') app.quit();
+});
 ```
 
 ⚠️ IMPORTANTE:
 
-Se nel package.json hai "type": "module" → usa main.js con import.  
-Se vuoi usare require() → usa main.cjs.
+Se nel `package.json` hai `"type": "module"` → usa `main.js` con `import`.  
+Se vuoi usare `require()` → usa `main.cjs`.
 
 ## 4. Aggiungi queste parti al package.json
 ```json,
@@ -83,8 +90,27 @@ Apri due terminali:
 Electron mostrerà la tua app React in tempo reale.
 
 # 📦 COME FARE LA BUILD PER WINDOWS 10 (EXE o installer)
-## 1. Configura electron-builder
-Aggiungi al package.json:
+## 1. Configura i percorsi relativi
+Cambia il tuo `vite.congif.js` con questo:
+``` javascript,
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import path from 'path'
+
+export default defineConfig({
+  plugins: [react()],
+  base: './',
+  build: {
+    outDir: 'dist', 
+    rollupOptions: {
+      input: path.resolve(__dirname, 'index.html')
+    }
+  }
+})
+```
+
+## 2. Configura electron-builder
+Aggiungi al `package.json`:
 
 ``` json,
 "build": {
@@ -102,17 +128,19 @@ Aggiungi al package.json:
 
 Ricorda di personalizzare il nome del package dentro a `"appId"`.
 
-## 2. Modifica main.js per distinguere dev e build
-Aggiungi al main.js:
+## 3. Modifica main.js per distinguere dev e build
+Aggiungi al `main.js`:
 ``` javascript,
-if (process.env.NODE_ENV === 'production') {
-  win.loadFile('dist/index.html')
+const isDev = !app.isPackaged;
+
+if (isDev) {
+  win.loadURL('http://localhost:5173');
 } else {
-  win.loadURL('http://localhost:5173')
+  win.loadFile(path.join(__dirname, 'dist', 'index.html'));
 }
 ```
 
-## 3. Esegui la build
+## 4. Esegui la build
 Scrivi nella console:  
 `npm run electron:build`
 
