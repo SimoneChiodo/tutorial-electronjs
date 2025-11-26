@@ -95,12 +95,12 @@ Aggiungi al package.json:
     "package.json"
   ],
   "win": {
-    "target": "nsis",
-    "sign": false
+    "target": "nsis"
   }
 }
-sign: false // → evita problemi con certificati e firma digitale. (non mettere questo commento)
 ```
+
+Ricorda di personalizzare il nome del package dentro a `"appId"`.
 
 ## 2. Modifica main.js per distinguere dev e build
 Aggiungi al main.js:
