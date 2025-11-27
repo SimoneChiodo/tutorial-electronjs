@@ -1,4 +1,5 @@
-# ✅ INSTALLARE ELECTRON IN UN PROGETTO VITE (React)
+# ✅ INSTALLARE ELECTRON IN UN PROGETTO VITE + REACT (Build Windows)
+Questa guida spiega come integrare Electron in un progetto Vite + React per generare build Windows.
 
 ## 1. Installa Electron
 
