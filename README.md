@@ -48,6 +48,7 @@ const createWindow = () => {
   const isDev = !app.isPackaged;
 
   if (isDev) {
+    // win.webContents.openDevTools(); // Se si vuole aprire il debug (come f12 nel browser)
     win.loadURL('http://localhost:5173');
   } else {
     win.loadFile(path.join(__dirname, 'dist', 'index.html'));
@@ -135,6 +136,7 @@ Aggiungi al `main.js`:
 const isDev = !app.isPackaged;
 
 if (isDev) {
+  // win.webContents.openDevTools(); // Se si vuole aprire il debug (come f12 nel browser)
   win.loadURL('http://localhost:5173');
 } else {
   win.loadFile(path.join(__dirname, 'dist', 'index.html'));
